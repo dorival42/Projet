@@ -9,18 +9,18 @@ from app.routers.recommender import router
 ##Fastapi
 app = FastAPI()
 
-<<<<<<< HEAD
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://*.streamlit.app",
+        "https://recommandationfilms.streamlit.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-=======
->>>>>>> f063e3eb99d4db8be0eac97f67918a1e0fddf3ca
 # Inclure les routeurs
 app.include_router(router, tags=["recommender"])
 
