@@ -73,22 +73,6 @@ def get_movie_by_id(movie_id: int):
 
 def get_user_recommendations(user_id: int, num_recommendations: int = 5):
     """
-<<<<<<< HEAD
-    Demande des recommandations pour un utilisateur donné.
-    Renvoie la liste de recommandations (dicts).
-    """
-    payload = {"user_id": user_id, "num_recommendations": num_recommendations}
-    try:
-        url = f"{BACKEND_URL}/recommendation_movies/{user_id}"
-        resp = requests.post(url, json=payload)
-        resp.raise_for_status()
-        data = resp.json()
-        # Le modèle de réponse contient 'recommendations'
-        return data.get("recommendations", [])
-    except Exception as e:
-        print(f"Erreur get_user_recommendations: {e}")
-        return []
-=======
     Récupère des recommandations de films personnalisées pour un utilisateur.
 
     Args:
@@ -176,4 +160,3 @@ def get_genre_distribution_by_year(year: int):
     """
     response = requests.get(f"{BACKEND_URL}/statistics/distribution_genres/{year}")
     return response.json() if response.status_code == 200 else None
->>>>>>> f063e3eb99d4db8be0eac97f67918a1e0fddf3ca
