@@ -1,26 +1,21 @@
-### **Cahier des charges : Système de Recommandation de Films **
+# Projet d'Informatique Avancé: HomeFlix, un système de recommendation de films
+
+##  KOUMBA BOUNDA Louis-Marie <br> LECLERC Cédric <br>DORIVAL Pierre-Chrislin
+
+## Sommaire
+- [Contexte du projet](#contexte-du-projet)
+- [Description du projet](#description-du-projet)
+- [Création de la base de données](#création)
+- [L'Application](#lapplication)
 
 
 
-#### **1. CONTEXTE DU PROJET**
+### Contexte du projet:
+Le but projet a été de concevoir HomeFlix, une plateforme de recommandation de films offrant à chaque utilisateur ou utilisatrice une expérience personnalisée. Le système propose des listes de films adaptées aux goûts et préférences de chacun(e). Et pour cela, nous avons suivi un plan et nous avons utilisé les notions vu au cours de cours, nous permettant ainsi de répondre à la problématique.
 
-En tant que plateforme de streaming de contenus audiovisuels, nous souhaitons développer une solution de **recommandation de films** qui repose sur des données réelles et utilise une approche de filtrage collaboratif. L'objectif est d'offrir une expérience utilisateur personnalisée en proposant une liste de films adaptés à leurs goûts et préférences, tout en permettant une analyse approfondie des données ENcollectées.
+### Description du projet
 
----
-
-#### **2. OBJECTIFS**
-
-- Créer un système capable de **recommander des films personnalisés** à un utilisateur en fonction des goûts d'autres utilisateurs (filtrage collaboratif).
-- Mettre en place une **base de données centrale** pour stocker et gérer les données des films et des évaluations.
-- Concevoir une **interface front-end** intuitive pour visualiser les tendances des films (par exemple : films populaires, distributions des notes, tendances par genre).
-- Exposer une API via un **backend** chargé de générer les recommandations.
-- Déployer toute la solution dans un environnement distribué à l'aide de **conteneurs Docker**.
-
----
-
-#### **3. DESCRIPTION DU PROJET**
-
-Le système de recommandation sera composé de **3 services distincts** qui communiquent entre eux :
+Le système de recommandation est composé de 3 services distincts qui communiquent entre eux :
 
 1. **Base de données centrale (DuckDB)**  
    - Stocke les données des films (extraites de l'API TMDB et du dataset Kaggle).
@@ -38,116 +33,59 @@ Le système de recommandation sera composé de **3 services distincts** qui comm
      - Analyser les données des films : distribution des notes, évolution de la popularité des films.
      - Afficher les recommandations générées par l'API backend pour un utilisateur spécifique.
 
-L'ensemble du système sera orchestré à l'aide de **Docker Compose**. 
+L'ensemble du système a été orchestré à l'aide de **Docker Compose**. 
 
----
+### Création 
 
-#### **4. FONCTIONNALITÉS ATTENDUES**
+Dans un premier temps, il est tout à fait possible de créer une base de données en local sans devoir utilisé celle déja présente. Voici les différentes étapes :
 
-##### A. **Service Base de Données (DuckDB)**  
-- Une base relationnelle avec deux principales tables :
-  - **Films** : Stocke les informations sur les films récupérés des sources externes (TMDB et Kaggle).
-    - Attributs : `id`, `title`, `genres`, `description`, `release_date`, `vote_average`, `vote_count`.
-  - **Ratings** : Stocke les évaluations des utilisateurs.
-    - Attributs : `user_id`, `film_id`, `rating`, `timestamp`.
-- Exporte la base sous forme de fichier pour qu’elle puisse être interrogée par le backend et le frontend et d'autres services.
+1. **Récuperer le projet**
+    De la manière que vous voulez créer un répértoire en local et récupérer les fichiers (en faisant par exemple un git clone). Vous pouvez bien sûr travailler avec la base de données déja présente et dans ce cas-là vous pouvez passer directement à la partie 3.
 
-##### B. **Service Backend (API)**  
-- Fournit un ensemble de **endpoints RESTful** :
-  1. **GET /movie/{id}** : Retourne les détails d’un film spécifique par son identifiant.
-  2. **POST /recommendations/{user_id}** : Retourne une liste de films recommandés pour l'utilisateur `user_id`.  
-    - S'appuie sur un modèle de **filtrage collaboratif avec prédictions**.
-    - Note prédite (`rating_predicted`) intégrée dans la réponse.
-  3. **GET /statistics/{gender}/{year}** : Retourne des statistiques générales sur les films (par exemple, top 10 des films par note moyenne, distribution des genres).
+2. **Création d'une base de données**
+    - Configuration de l'environnement de développement : <br>
+    Tout d'abord, on vous conseille de créer un environnement virtuel, voici deux approches :
+        - Approche 1 : Initialisation de l'environnement virtuelle
+            Afin d'initialiser l'environnement de développement, à la racine du projet écrire.<br>
+            **Sur Linux :** <br>
+                `python3 -m venv .venv` <br>
+                `Source .venv/bin/activate` <br>
 
-##### C. **Service Frontend (Dashboard)**  
-- Propose un design interactif basé sur Streamlit.
-- Affiche :  
-  1. Les **statistiques analytiques** sous forme de graphiques :
-     - Distribution des notes moyennes des films.
-     - Évolution du nombre de films par année./ genre
-     - Top film / Top fim par genre / Années
-  2. Les recommandations reçues via l’API pour un utilisateur donné.
-     - Formulaire simple permettant de saisir un `user_id` et de récupérer 
-     	- Ses films préférées
-     	- Les recommandations correspondantes.
+            **Sur windows:** <br>
+                `python -m venv .venv`  <br>
+                `.venv/Scripts/activate` <br>
 
-##### D. **Approche Machine Learning (Filtrage collaboratif)**  
-- Modèle basé sur la **factorisation matricielle SVD** avec librairies comme `surprise` ou `scikit-learn`.
-- Prend en compte les **évaluations existantes (ratings)** pour formuler des recommandations précises.
-- Capable d’évaluer les performances du modèle avec des métriques telles que **RMSE** ou **MAE**.
+            **Installation des dépendances :** <br>
+                `pip install -r requirements.txt`
 
-##### E. **Orchestration avec Docker Compose**
-- Tous les composants (backend, frontend, base de données) doivent être déployables ensemble via un fichier `docker-compose.yml`.
-- L'ensemble des services doit communiquer correctement :
-  - Backend interroge DuckDB via des volumes de données partagés.
-  - Frontend consomme les endpoints REST exposés par le backend.
-- Garantie de reproductibilité entre différents environnements (développement, production).
+        - Approche 2 (plus rapide) : <br>
+            `pip install uv` ou `pip3 install uv` <br>
+            `uv init` (uv initialise un environnement virtuelle à notre place) <br>
+            `uv add -r requirments.txt` (uv est plus rapide que pip pour installer les dépendances)
+    
+    - Collecte des données depuis l'api : <br>
+    Dans cette étape, vous allez récolter les données depuis l'api **TMBD**. 
+    Pour ce faire, créez un fichier .env à la racine du projet pour mettre votre clé api , ou ici le **TMDB_BEARER_TOKEN** récolter sur TMDB, et sauvegarder le fichier. <br>
+    *(Vous pouver récupérer votre clé api et votre token sur [TMBD](developer.themoviedb.org) )*
 
----
+    Une fois tout cela prêt, il vous suffira de lancer le script présent à `backend/app/utils/data_from_api.py`.
+    Puis de faire la même chose avec `backend/app/utils/database_loading`, votre base de données sera bien crée sous le nom de `film_reco.db`
 
-#### **5. RÉPARTITION DES RESSOURCES**
+    - Information : Un fichier jupt.ipynb est présent dans le dossier data pour s'approprier la base de donnée et faire quelques requête dessus si besoin *(il y a par exemple une instruction pour supprimer les films dans la table avec une release_date vide. Et normalement cela n'est pas sensé arrivé vu la construction de la table avec sqlalchemy mais si vous avez ce problème allez voir s'il y à des films avec une release_date vide)*.
 
-**Sources de données :**
-1. **[TMDB API](https://developers.themoviedb.org/3/getting-started)**  
-   - URL utile pour récupérer des films populaires :  
-     `https://api.themoviedb.org/3/movie/popular`
-   - Données principales : titre, vote_average, description, genres.
+### L'Application
 
-2. **[The Movies Dataset sur Kaggle](https://www.kaggle.com/rounakbanik/the-movies-dataset)**  
-   - Données principales disponibles dans `ratings.csv` : user_id, film_id, notes, horodatage.
+1. **Accès à l'API**<br>
+    Vous pouvez décider d'accéder à l'API pour tester les endpoints par exemple. Pour cela il vous suffit de faire `uvicorn backend.main:app --port 8000 --reload` (*--reload permet de relancer automatiquement le serveur unicorn en cas de changement dans le code*). <br>
 
-**Technologies :**
-- **DuckDB** : Pour gérer la base de données.
-- **Flask/FastAPI** : Pour implémenter le backend.
-- **Streamlit/Dash** : Pour l'application frontend.
-- **Docker Compose** : Pour déployer les services interconnectés.
-- **Surprise ou Scikit-learn** : Pour les algorithmes de filtrage collaboratif.
+    À partir de là, il vous suffit d'aller à l'adresse suivante:  [FastApi](http://127.0.0.1:8000/docs) et vous pourrer tester les endpoints.
 
----
-
-#### **6. LIVRABLES ATTENDUS**
-
-1. **Base DuckDB** contenant :
-   - Le fichier .Sql pour crée les tables et les valeurs crée avec SqlAlchemy puis dumpé sours format SQL (dump de base de donnée)
-   -  Les tables `films` et `ratings`, avec les données de TMDB et Kaggle correctement chargées.
-
-2. **Code backend (API Flask/FastAPI)** :
-   - Récupérer les données de DuckDB et fournir des recommandations basées sur des prédictions SVD.
-   - Fournir les endpoints nécessaires décrits ci-dessus.
-
-3. **Application frontend (dashboard)** :
-   - Réaliser des visualisations interactives à partir de DuckDB.
-   - Consommer les recommandations générées par le backend.
-
-4. **Fichier Docker Compose** :
-   - Déployer automatiquement tous les services.
-
-5. **Documentation** :
-   - Instructions pour installer, configurer, exécuter et tester le projet.
+2. **L'application**<br>
+    Pour lancer l'application il suffit de faire
+    ```bash
+    docker-compose up --build
+    ```
+Maintenant à vous de jouer !
+    
 
 
-
-#### **7. DÉLAI D'EVALUATION**
-
-Le projet doit être livré sous un délai de **6 semaines**, découpées comme suit :
-1. **Semaine 1-2** : Collecte des données et configuration de la base DuckDB.
-2. **Semaine 3-4** : Développement du backend et mise en œuvre du modèle de recommandation.
-3. **Semaine 5** : Création de l'interface frontend.
-4. **Semaine 6** : Integration finale et déploiement avec Docker Compose.
-
----
-
-#### **8. CRITÈRES DE QUALITÉ**
-
----
-
-1. **METHODOGIE** Suivi de méthodologie etudiée pendant le cours pour créer un code production (modules, logging, typing, error handling ... etc)
-2. Code bien structuré et documenté.
-3. Visualisation claire informative.
-
---- 
-
-#### **9. RECOMPONSE**
-
-Voyage tout frais payés à DisneyLand 🤥

@@ -40,7 +40,7 @@ def load_movie_metadata(max_pages: int = 5):
         time.sleep(0.2)
     # Sauvegarde JSON
     os.makedirs("data", exist_ok=True)
-    with open("data/movies_database.json", "w", encoding="utf-8") as f:
+    with open("backend/app/utils/data/movies_database.json", "w", encoding="utf-8") as f:
         json.dump(all_movies, f, ensure_ascii=False, indent=4)
     logger.info(f"✅ {len(all_movies)} films enregistrés dans 'data/movies_database.json'.")
 
@@ -56,11 +56,11 @@ def load_genres():
         return
     data = resp.json().get("genres", [])
     os.makedirs("data", exist_ok=True)
-    with open("data/movies_genre.json", "w", encoding="utf-8") as f:
+    with open("backend/app/utils/data/movies_genre.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     logger.info(f"✅ {len(data)} genres enregistrés dans 'data/movies_genre.json'.")
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-    load_movie_metadata(max_pages=5)
+    load_movie_metadata(max_pages=500)
     load_genres()

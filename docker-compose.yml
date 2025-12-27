@@ -4,8 +4,8 @@ services:
       context: ./backend
     ports:
       - "8000:8000"
-    volumes:
-      - ./data:/app/data  # pour accéder au même fichier DuckDB
+    #volumes:
+    #  - ./data:/app/data  # pour accéder au même fichier DuckDB
     networks:
       - app-network
     environment:
@@ -16,8 +16,6 @@ services:
       context: ./frontend
     ports:
       - "8501:8501"
-    volumes:
-      - ./data:/app/data  # pour accéder au fichier DuckDB
     depends_on:
       - backend
     networks:

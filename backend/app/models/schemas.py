@@ -12,6 +12,7 @@ class Film(BaseModel):
     release_date: date
     vote_average: float
     vote_count: int
+    poster_path: Optional[str] = None
 
 class FilmListResponse(BaseModel):
     films: List[Film]
@@ -26,6 +27,7 @@ class Recommendation(BaseModel):
     movie_id: int
     title: str
     rating_predicted: float
+    poster_path: Optional[str] = None
 
     @field_validator("rating_predicted")
     @classmethod
@@ -60,3 +62,7 @@ class GenreDistribution(BaseModel):
 class DistributionGenresResponse(BaseModel):
     year: int
     genres: List[GenreDistribution]
+
+class FilmCountResponse(BaseModel):
+    total_films: int
+
