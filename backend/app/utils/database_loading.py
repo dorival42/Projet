@@ -187,3 +187,4 @@ if __name__ =="__main__":
     add_rating_from_csv()
     
     session.close()
+

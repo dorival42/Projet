@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 import sys
 import os
+from fastapi.middleware.cors import CORSMiddleware
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 from app.routers.recommender import router
 
@@ -10,6 +11,13 @@ from app.routers.recommender import router
 app = FastAPI()
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Inclure les routeurs
 app.include_router(router, tags=["recommender"])
