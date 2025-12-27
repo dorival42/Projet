@@ -15,7 +15,8 @@ st.set_page_config(
 st.sidebar.title("🎬 Film Recommender")
 section = st.sidebar.radio("Navigation", [
     "📊 Statistiques des films",
-    "🎯 Recommandations personnalisées"
+    "🎯 Recommandations personnalisées",
+    "🌟 Films populaires"
 ])
 
 st.title("🎥 Tableau de bord de recommandations de films")
@@ -65,3 +66,24 @@ elif section == "🎯 Recommandations personnalisées":
                 st.warning("Aucune recommandation trouvée pour cet utilisateur.")
         except Exception as e:
             st.error(f"Erreur lors de la récupération des recommandations : {e}")
+
+
+# Section pour les films populaires
+elif section == "🌟 Films populaires":
+    # Choix de la page pour charger les films
+    page_num = st.sidebar.number_input(
+        "Page des films à charger", min_value=1, max_value=100, value=1
+    )
+    st.subheader(f"🎬 Liste des films populaires - Page {page_num}")
+
+    # Charger les films populaires
+    popular_movies = get_all_movies(page=page_num)  # On suppose que la page 1 contient les films populaires
+    if not popular_movies:
+        st.error("Impossible de récupérer les films populaires.")
+    else:
+        # Affichage des films populaires avec titre, popularité et date de sortie
+        for film in popular_movies[:5]:  # Limiter à 5 films populaires pour ne pas surcharger l'interface
+            st.write(f"**{film.get('title', 'Titre inconnu')}**")
+            st.write(f"🎬 Moyenne vote: {film.get('vote_average', 'N/A')}")
+            st.write(f"📅 Date de sortie: {film.get('release_date', 'N/A')}")
+            st.markdown("---")

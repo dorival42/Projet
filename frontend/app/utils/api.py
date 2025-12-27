@@ -23,6 +23,18 @@ def get_movie_by_id(movie_id: int):
     return response.json() if response.status_code == 200 else None
 
 def get_user_recommendations(user_id: int, num_recommendations: int = 5):
+    """
+    Demande des recommandations pour un utilisateur donné.
+    Renvoie la liste de recommandations (dicts).
+    """
     payload = {"user_id": user_id, "num_recommendations": num_recommendations}
-    response = requests.post(f"{BACKEND_URL}/recommendation_movies/{{user_id}}", json=payload)
-    return response.json() if response.status_code == 200 else []
+    try:
+        url = f"{BACKEND_URL}/recommendation_movies/{user_id}"
+        resp = requests.post(url, json=payload)
+        resp.raise_for_status()
+        data = resp.json()
+        # Le modèle de réponse contient 'recommendations'
+        return data.get("recommendations", [])
+    except Exception as e:
+        print(f"Erreur get_user_recommendations: {e}")
+        return []
